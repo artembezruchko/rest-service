@@ -4,8 +4,10 @@ import com.example.restservice.entity.User;
 import com.example.restservice.repository.UserRepository;
 import com.example.restservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,11 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(Long id) {
-        try {
-            return userRepository.findById(id).get();
-        } catch (Exception e) {
-            return new User();
-        }
+        return userRepository.findById(id).get();
     }
 
     @Override
@@ -43,14 +41,20 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public List<User> getUsersByTestName(String name) {
+        User user = new User().setTestName(name).setUsed(false);
+        Example<User> example = Example.of(user);
+        return userRepository.findAll(example);
+    }
+
     public User mapUser(String testName, String email, String password, String photosId, String data, boolean used){
-        User user = new User();
-        user.setTestName(testName);
-        user.setEmail(email);
-        user.setPhotosId(photosId);
-        user.setPassword(password);
-        user.setData(data);
-        user.setUsed(used);
-        return user;
+        return new User()
+                .setTestName(testName)
+                .setEmail(email)
+                .setPhotosId(photosId)
+                .setPassword(password)
+                .setData(data)
+                .setUsed(used);
     }
 }

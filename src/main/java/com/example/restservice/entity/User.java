@@ -6,9 +6,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 
 @Data
+@Accessors(chain = true)
 @Entity
 public class User {
 
@@ -21,4 +23,5 @@ public class User {
     private String password;
     private String data;
     private boolean isUsed;
+    private String error;
 }
